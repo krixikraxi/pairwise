@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Create a new User!</h1>
+        </div>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div>
+            {{ form_label(form.username) }}:
+            {{ form_errors(form.username) }}
+            {{ form_widget(form.username) }}
+        </div>
+        <br>
+        {{ form_row(form.save) }}
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
