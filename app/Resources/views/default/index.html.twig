@@ -10,13 +10,15 @@
         <br>
         <br>
         Please select a User:
-        <ul id="users">
-            {% for user in users %}
-                <li>{{ user.username }}</li>
-            {% endfor %}
-        </ul>
+        <br>
+        {{ form_start(form) }}
+        <div>
+            {{ form_label(form.users) }}:
+            {{ form_widget(form.users) }}
+            {{ form_widget(form.select) }}
+        </div>
+        {{ form_end(form) }}
     </div>
-
 
 {% endblock %}
 

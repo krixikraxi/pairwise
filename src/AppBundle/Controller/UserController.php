@@ -15,6 +15,7 @@ class UserController extends Controller
      * @Route("/createUser", name="createuser")
      */
     public function createUserAction(Request $request) {
+        $session = $request->getSession();
 
         // create a new User
         $user = new User();
@@ -36,7 +37,22 @@ class UserController extends Controller
             return $this->redirectToRoute('mainpage');
         }
 
-        return $this->render('user/newuser.html.twig', array('form'=> $form->createView()));
+        return $this->render('user/newuser.html.twig', array(
+            'form'=> $form->createView(),
+            'usersession'=>$session->get('user')
+        ));
+    }
+
+    /**
+     * @Route("/logoutUser", name="logoutuser")
+     */
+    public function logoutUserAction(Request $request) {
+        $session = $request->getSession();
+        $session->remove('user');
+
+        return $this->redirectToRoute('mainpage');
+
+
     }
 
 }
