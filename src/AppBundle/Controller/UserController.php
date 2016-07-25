@@ -2,8 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Partner;
 use AppBundle\Entity\User;
+use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,19 +20,22 @@ class UserController extends Controller
     public function createUserAction(Request $request) {
         $session = $request->getSession();
 
-        // create a new User
+        // create a new User with partners
         $user = new User();
+        $partnerone = new Partner();
+        $partnertwo = new Partner();
+        $user->setPartnerone($partnerone);
+        $user->setPartnertwo($partnertwo);
 
-        $form = $this->createFormBuilder($user)
-            ->add('username', TextType::class)
-            ->add('save', SubmitType::class, array('label' => 'User hinzufügen'))
-            ->getForm();
+        $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
 
             //save the user into the db
             $em = $this->getDoctrine()->getManager();
+            $em->persist($partnerone);
+            $em->persist($partnertwo);
             $em->persist($user);
             $em->flush();
 

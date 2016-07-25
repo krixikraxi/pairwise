@@ -9,11 +9,26 @@
         {{ form_start(form) }}
         {{ form_errors(form) }}
 
-        <div>
+        <div class="user">
             {{ form_label(form.username) }}:
-            {{ form_errors(form.username) }}
             {{ form_widget(form.username) }}
+            <br>
+            {{ form_label(form.description) }}:
+            {{ form_widget(form.description) }}
         </div>
+
+        <br>
+
+        <div class="partner1">
+            {{ form_label(form.partnerone.partnername) }}:
+            {{ form_widget(form.partnerone.partnername) }}
+        </div>
+
+        <div class="partner2">
+            {{ form_label(form.partnertwo.partnername) }}:
+            {{ form_widget(form.partnertwo.partnername) }}
+        </div>
+
         <br>
         {{ form_row(form.save) }}
         {{ form_end(form) }}

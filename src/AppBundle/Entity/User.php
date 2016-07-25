@@ -20,10 +20,27 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank()
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="string", length=500, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Partner")
+     * @ORM\JoinColumn(name="partnerone_id", referencedColumnName="id", nullable=false)
+     */
+    private $partnerone;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Partner")
+     * @ORM\JoinColumn(name="partnertwo_id", referencedColumnName="id", nullable=false)
+     */
+    private $partnertwo;
 
 
     /**
@@ -52,5 +69,47 @@ class User
      */
     public function getUsername() {
         return $this->username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description) {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPartnerone() {
+        return $this->partnerone;
+    }
+
+    /**
+     * @param mixed $partnerone
+     */
+    public function setPartnerone($partnerone) {
+        $this->partnerone = $partnerone;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPartnertwo() {
+        return $this->partnertwo;
+    }
+
+    /**
+     * @param mixed $partnertwo
+     */
+    public function setPartnertwo($partnertwo) {
+        $this->partnertwo = $partnertwo;
     }
 }
