@@ -6,8 +6,7 @@
         <div class="page-header">
             <h1>Welcome to Pairwise!</h1>
         </div>
-        Here you can split bills between two parties.
-        <br>
+        <h3>Here you can split bills between two parties.</h3>
         <br>
         Please select a User:
         <br>
@@ -18,6 +17,22 @@
             {{ form_widget(form.select) }}
         </div>
         {{ form_end(form) }}
+
+        <br>
+        <br>
+
+        {% if usersession != null %}
+            Infos about the selected User:<br>
+            UserID: {{ usersession.id }}<br>
+            Username: {{ usersession.username }}<br>
+            Description: {{ usersession.description }}<br>
+            <br>
+            Partner 1: {{ usersession.partnerone.partnername }}<br>
+            Partner 2: {{ usersession.partnertwo.partnername }}<br>
+        {% else %}
+            Please Select a User to display Infos!
+        {% endif %}
+
     </div>
 
 {% endblock %}
