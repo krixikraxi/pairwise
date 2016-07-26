@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Bill;
 use AppBundle\Form\BillType;
 use AppBundle\Form\SelectPartnerType;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,7 @@ class BillController extends Controller
          //       $selected_user->getPartnertwo()
          //   ]));
         $bill = new Bill();
+        $bill->setBilldate(new Datetime());
         $form = $this->createForm(BillType::class, $bill, array(
             'partners'=>[
                 $selected_user->getPartnerone(),

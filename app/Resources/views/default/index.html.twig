@@ -27,8 +27,8 @@
             Username: {{ usersession.username }}<br>
             Description: {{ usersession.description }}<br>
             <br>
-            Partner 1: {{ usersession.partnerone.partnername }}<br>
-            Partner 2: {{ usersession.partnertwo.partnername }}<br>
+            Partner 1: {{ usersession.partnerone.partnername }} <{{ usersession.partnerone.id }}><br>
+            Partner 2: {{ usersession.partnertwo.partnername }} <{{ usersession.partnertwo.id }}><br>
         {% else %}
             Please Select a User to display Infos!
         {% endif %}
