@@ -17,7 +17,7 @@ class BillType extends AbstractType
         //array('partners'=> [new Partner(),new Partner()])
         $builder->add('partner', SelectPartnerType::class, $options)
             ->add('billname', TextType::class)
-            ->add('billdescription', TextType::class)
+            ->add('billdescription', TextType::class, array('required' => false))
             ->add('amount', MoneyType::class)
             ->add('billdate', DateTimeType::class)
             ->add('save', SubmitType::class, array('label' => 'Add the Bill'));

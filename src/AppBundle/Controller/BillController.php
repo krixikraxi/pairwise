@@ -52,6 +52,7 @@ class BillController extends Controller
                 );
             }
             $bill->setPartner($partner);
+            $bill->setBilled(false);
             $em->persist($bill);
             $em->flush();
 

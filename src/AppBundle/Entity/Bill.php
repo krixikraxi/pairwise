@@ -25,7 +25,7 @@ class Bill
     private $billname;
 
     /**
-     * @ORM\Column(type="string", length=500)
+     * @ORM\Column(type="string", length=500, nullable=true)
      */
     private $billdescription;
 
@@ -45,6 +45,11 @@ class Bill
      * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
      */
     private $partner;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $billed;
 
     /**
      * @return mixed
@@ -117,10 +122,25 @@ class Bill
     }
 
     /**
-     * @param mixed $category
+     * @param mixed $partner
      */
     public function setPartner($partner) {
         $this->partner = $partner;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getBilled() {
+        return $this->billed;
+    }
+
+    /**
+     * @param mixed $billed
+     */
+    public function setBilled($billed) {
+        $this->billed = $billed;
+    }
+
 
 }
