@@ -42,12 +42,8 @@ class BillController extends Controller
         if($form->isSubmitted() && $form->isValid()) {
 
             //todo: make this better (e.g. dont fetch the partner again from db)
-            $em = $this->getDoctrine()->getManager();
-            //$selected_partner = $form->get('partner')->getConfig()->getOption('choices');
-
-            //throw $this->createNotFoundException('sdf'. $form->get('partner')->getConfig()->getOption('choices'));
-
-            $partner = $em->getRepository('AppBundle:Partner')->find($selected_user->getPartnerone()->getId());
+            $em = $this->getDoctrine()->getManager();;
+            $partner = $em->getRepository('AppBundle:Partner')->find($form['partner']['partner']->getData()->getId());
             if (!$partner) {
                 throw $this->createNotFoundException(
                     'No partner found for id '.$partner

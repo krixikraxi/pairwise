@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SelectPartnerType extends AbstractType
 {
-    //todo what is best practice for data here? need the two partners here
+    //todo: what is best practice for data here? need the two partners here
     protected $partners;
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
