@@ -16,6 +16,6 @@ class UserType extends AbstractType
             ->add('description', TextType::class)
             ->add('partnerone', PartnerType::class)
             ->add('partnertwo', PartnerType::class)
-            ->add('save', SubmitType::class, array('label' => 'User hinzufügen'));
+            ->add('save', SubmitType::class, array('label' => 'Add the User'));
     }
 }

@@ -26,12 +26,6 @@ class BillController extends Controller
             ));
         }
 
-        //todo delete
-        //$form = $this->createForm(SelectPartnerType::class, array(), array(
-        //    'partners'=>[
-         //       $selected_user->getPartnerone(),
-         //       $selected_user->getPartnertwo()
-         //   ]));
         $bill = new Bill();
         $bill->setBilldate(new Datetime());
         $form = $this->createForm(BillType::class, $bill, array(
@@ -44,7 +38,7 @@ class BillController extends Controller
         if($form->isSubmitted() && $form->isValid()) {
 
             //todo: make this better (e.g. dont fetch the partner again from db)
-            $em = $this->getDoctrine()->getManager();;
+            $em = $this->getDoctrine()->getManager();
             $partner = $em->getRepository('AppBundle:Partner')->find($form['partner']['partner']->getData()->getId());
             if (!$partner) {
                 throw $this->createNotFoundException(
@@ -80,8 +74,20 @@ class BillController extends Controller
             ));
         }
 
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Bill');
+        $query = $repository->createQueryBuilder('b')
+            ->where('b.partner = :p1 OR b.partner = :p2')
+            ->setParameter('p1', $selected_user->getPartnerone()->getId())
+            ->setParameter('p2', $selected_user->getPartnertwo()->getId())
+            ->orderBy('b.billdate', 'ASC')
+            ->getQuery();
+
+        $bills = $query->getResult();
+
+
         return $this->render('bill/showbills.html.twig', array(
-            'usersession'=>$session->get('user')
+            'usersession'=>$session->get('user'),
+            'bills'=> $bills
         ));
 
     }
