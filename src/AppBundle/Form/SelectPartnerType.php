@@ -25,8 +25,7 @@ class SelectPartnerType extends AbstractType
                 },
                 'expanded' => true,
                 'multiple' => false,
-            ])
-            ->add('select', SubmitType::class);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver) {

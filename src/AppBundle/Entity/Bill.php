@@ -44,7 +44,7 @@ class Bill
      * @ORM\ManyToOne(targetEntity="Partner", inversedBy="bills")
      * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
      */
-    private $category;
+    private $partner;
 
     /**
      * @return mixed
@@ -112,15 +112,15 @@ class Bill
     /**
      * @return mixed
      */
-    public function getCategory() {
-        return $this->category;
+    public function getPartner() {
+        return $this->partner;
     }
 
     /**
      * @param mixed $category
      */
-    public function setCategory($category) {
-        $this->category = $category;
+    public function setPartner($partner) {
+        $this->partner = $partner;
     }
 
 }
