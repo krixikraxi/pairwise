@@ -26,11 +26,20 @@ class InvoiceController extends Controller
             ));
         }
 
-        //todo: pull the invoices from the db
+        //pull the invoices from the db
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('AppBundle:Invoice');
+        $query = $repository->createQueryBuilder('b')
+            ->where('b.user = :user')
+            ->setParameter('user', $selected_user->getId())
+            ->orderBy('b.invoicedate', 'ASC')
+            ->getQuery();
+        $invoices = $query->getResult();
 
 
         return $this->render('invoices/invoices.html.twig', array(
-            'usersession'=>$session->get('user')
+            'usersession'=>$session->get('user'),
+            'invoices'=>$invoices
         ));
     }
 
