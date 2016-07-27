@@ -8,8 +8,41 @@
         </div>
         <h4>The Bills included in the new Invoice:</h4>
 
-        ---insert table---
+        <table class="table table-hover" id="notbilledbills">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Partner</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Billed</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for bill in bills %}
+                <tr>
+                    <td>{{ bill.id }}</td>
+                    <td>{{ bill.partner.partnername }}</td>
+                    <td>{{ bill.billname }}</td>
+                    <td>{{ bill.billdescription }}</td>
+                    <td>{{ bill.amount }}</td>
+                    <td>{{ bill.billdate | date("m.d.Y h:m") }}</td>
+                    <td>{{ bill.billed ? 'Yes':'No' }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
         <br>
+        Summe {{ usersession.partnerone.partnername }} : {{ amountp1 }}
+        <br>
+        Summe {{ usersession.partnertwo.partnername }}: {{ amountp2 }}
+        <br>
+        <br>
+
+
         ---insert OK button---
     </div>
 

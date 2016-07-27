@@ -52,6 +52,12 @@ class Bill
     private $billed;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Invoice")
+     * @ORM\JoinColumn(name="invoice_id", referencedColumnName="id")
+     */
+    private $invoice;
+
+    /**
      * @return mixed
      */
     public function getId() {
@@ -142,5 +148,17 @@ class Bill
         $this->billed = $billed;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getInvoice() {
+        return $this->invoice;
+    }
 
+    /**
+     * @param mixed $invoice
+     */
+    public function setInvoice($invoice) {
+        $this->invoice = $invoice;
+    }
 }

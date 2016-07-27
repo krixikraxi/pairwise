@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Bill;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -46,12 +47,47 @@ class InvoiceController extends Controller
 
         //todo: create the invoice...
 
+        //get the unbilled bills from the db
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('AppBundle:Bill');
+        $query = $repository->createQueryBuilder('b')
+            ->where('(b.partner = :p1 OR b.partner = :p2) AND b.billed = false')
+            ->setParameter('p1', $selected_user->getPartnerone()->getId())
+            ->setParameter('p2', $selected_user->getPartnertwo()->getId())
+            ->orderBy('b.billdate', 'ASC')
+            ->getQuery();
+        $bills = $query->getResult();
+
+        //calculate the amount for each partner
+        $amount_p1 = $this->calculateAmount($bills, $selected_user->getPartnerone()->getId());
+        $amount_p2 = $this->calculateAmount($bills, $selected_user->getPartnertwo()->getId());
+
         // if the form is handled
         //$this->addFlash('notice', 'Invoice created...');
         //return $this->redirectToRoute('showinvoices');
 
         return $this->render('invoices/createinvoice.html.twig', array(
-            'usersession'=>$session->get('user')
+            'usersession'=>$session->get('user'),
+            'bills'=>$bills,
+            'amountp1'=>$amount_p1,
+            'amountp2'=>$amount_p2
         ));
     }
+
+    /**
+     * @param $bills
+     * @return int|mixed
+     */
+    private function calculateAmount($bills, $partnerid) {
+        $amount = 0;
+
+        /** @var Bill $bill */
+        foreach ($bills as $bill) {
+            if($bill->getPartner()->getId() == $partnerid) {
+                $amount += $bill->getAmount();
+            }
+        }
+        return $amount;
+    }
+
 }
