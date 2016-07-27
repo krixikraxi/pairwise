@@ -41,9 +41,10 @@
         Summe {{ usersession.partnertwo.partnername }}: {{ amountp2 }}
         <br>
         <br>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
 
-
-        ---insert OK button---
     </div>
 
 {% endblock %}

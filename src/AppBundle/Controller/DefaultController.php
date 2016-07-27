@@ -18,10 +18,6 @@ class DefaultController extends Controller
     public function indexAction(Request $request) {
         $session = $request->getSession();
 
-        //$repository = $this->getDoctrine()->getRepository('AppBundle:User');
-        //$users = $repository->findAll();
-
-        //$defaultData = array('message' => 'Type your message here');
         $form = $this->createFormBuilder(array())
             ->add('users', EntityType::class, array(
                 'class' => 'AppBundle:User',

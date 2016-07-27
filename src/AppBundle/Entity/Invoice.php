@@ -21,7 +21,7 @@ class Invoice
     /**
      * @ORM\Column(type="datetime")
      */
-    private $billdate;
+    private $invoicedate;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
@@ -51,15 +51,15 @@ class Invoice
     /**
      * @return mixed
      */
-    public function getBilldate() {
-        return $this->billdate;
+    public function getInvoicedate() {
+        return $this->invoicedate;
     }
 
     /**
-     * @param mixed $billdate
+     * @param mixed $invoicedate
      */
-    public function setBilldate($billdate) {
-        $this->billdate = $billdate;
+    public function setInvoicedate($invoicedate) {
+        $this->invoicedate = $invoicedate;
     }
 
     /**
