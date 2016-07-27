@@ -10,4 +10,3 @@ The Invoice splits the bills between the two partners and shows which partner ow
 
 Although most of the logic is implemented, there is still a lot of refactoring and testing to do.
 Furthermore this app needs much bootstrap and css magic.
-
