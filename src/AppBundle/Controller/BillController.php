@@ -9,6 +9,7 @@ use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class BillController extends Controller
 {
@@ -90,6 +91,43 @@ class BillController extends Controller
             'bills'=> $bills
         ));
 
+    }
+
+    /**
+     * @Route("/removeBill/{id}", name="removebill")
+     */
+    public function removeBillAction(Request $request, $id) {
+        $session = $request->getSession();
+        $selected_user = $session->get('user');
+
+        if($selected_user == null) {
+            throw $this->createAccessDeniedException('there is no user selected');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('AppBundle:Bill');
+        //$repository = $this->getDoctrine()->getRepository('AppBundle:Bill');
+        $query = $repository->createQueryBuilder('b')
+            ->where('(b.partner = :p1 OR b.partner = :p2) AND b.id = :id AND b.billed = false')
+            ->setParameter('p1', $selected_user->getPartnerone()->getId())
+            ->setParameter('p2', $selected_user->getPartnertwo()->getId())
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        /** @var Bill $bill */
+        $bill = $query->getOneOrNullResult();
+
+        if (!$bill) {
+            throw $this->createNotFoundException('The bill is already billed ore you dont have a bill with the id: '.$id);
+        }
+
+        //remove the bill
+        $em->remove($bill);
+        $em->flush();
+
+        return $this->redirectToRoute('showbill');
+
+        //return new Response('awesome:'.$bill->getId());
     }
 
 }
