@@ -17,6 +17,7 @@
                     <th>Amount</th>
                     <th>Date</th>
                     <th>Billed</th>
+                    <th>Options</th>
                 </tr>
                 </thead>
             <tbody>
@@ -29,6 +30,11 @@
                         <td>{{ bill.amount }}</td>
                         <td>{{ bill.billdate | date("m.d.Y h:m") }}</td>
                         <td>{{ bill.billed ? 'Yes':'No' }}</td>
+                        <td>
+                            {% if bill.billed == false %}
+                                <a href="{{ path('removebill', {'id': bill.id}) }}">Remove</a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -126,8 +126,6 @@ class BillController extends Controller
         $em->flush();
 
         return $this->redirectToRoute('showbill');
-
-        //return new Response('awesome:'.$bill->getId());
     }
 
 }
