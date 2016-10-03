@@ -3,22 +3,27 @@
 namespace AppBundle\Persistence;
 
 use AppBundle\Entity\User;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class UserPersistence
 {
-    private $entityManager ;
+    private $em;
 
-    public function __construct(EntityManager $entityManager) {
-        $this->entityManager = $entityManager;
+    public function __construct(ObjectManager $entityManager) {
+        $this->em = $entityManager;
     }
 
     public function persistUser(User $user) {
+        if($user == null) {
+            throw new Exception("User null");
+        } else if($user->getPartnerone() == null || $user->getPartnertwo() == null) {
+            throw new Exception("Partner null");
+        }
 
-
-        //$em->persist($task);
-        //$em->flush();
-
+        $this->em->persist($user->getPartnerone());
+        $this->em->persist($user->getPartnertwo());
+        $this->em->persist($user);
+        $this->em->flush();
     }
-
 }
