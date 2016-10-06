@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Bill;
+use AppBundle\Entity\User;
 use AppBundle\Form\BillType;
 use AppBundle\Form\SelectPartnerType;
 use DateTime;
@@ -69,28 +70,15 @@ class BillController extends Controller
         $selected_user = $session->get('user');
 
         if($selected_user == null) {
-            return $this->render('error.html.twig', array(
-                'error'=>'no user selected',
-                'usersession'=>$session->get('user')
-            ));
+            return $this->renderErrorNoUserSelected();
         }
 
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Bill');
-        $query = $repository->createQueryBuilder('b')
-            ->where('b.partner = :p1 OR b.partner = :p2')
-            ->setParameter('p1', $selected_user->getPartnerone()->getId())
-            ->setParameter('p2', $selected_user->getPartnertwo()->getId())
-            ->orderBy('b.billdate', 'ASC')
-            ->getQuery();
-
-        $bills = $query->getResult();
-
+        $bills = $this->getDoctrine()->getRepository('AppBundle:Bill')->findAllBillsFromTheUser($selected_user);
 
         return $this->render('bill/showbills.html.twig', array(
             'usersession'=>$session->get('user'),
             'bills'=> $bills
         ));
-
     }
 
     /**
@@ -126,6 +114,13 @@ class BillController extends Controller
         $em->flush();
 
         return $this->redirectToRoute('showbill');
+    }
+
+    private function renderErrorNoUserSelected() : Response {
+        return $this->render('error.html.twig', array(
+            'error'=>'no user selected',
+            'usersession'=>null
+        ));
     }
 
 }

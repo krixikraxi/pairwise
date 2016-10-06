@@ -48,6 +48,11 @@ class UserController extends Controller
         return $this->redirectToRoute('mainpage');
     }
 
+    /**
+     * Create a new and empty user with two empty partners
+     *
+     * @return User
+     */
     private function createNewUserWithPartners() : User {
         $user = new User();
         $partnerone = new Partner();
@@ -58,6 +63,11 @@ class UserController extends Controller
         return $user;
     }
 
+    /**
+     * Save a given user to the database
+     *
+     * @param User $user
+     */
     private function saveUserToDatabase(User $user) {
         $em = $this->getDoctrine()->getManager();
         $userPersistence = new UserPersistence($em);

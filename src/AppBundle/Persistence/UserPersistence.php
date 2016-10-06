@@ -15,7 +15,7 @@ class UserPersistence
     }
 
     public function persistUser(User $user) {
-        //todo: research if this check is enough
+        //todo: research if this check is enough, throw specific exception
         if($user == null) {
             throw new Exception("User null");
         } else if($user->getPartnerone() == null || $user->getPartnertwo() == null) {
