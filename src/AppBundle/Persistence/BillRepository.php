@@ -43,4 +43,21 @@ class BillRepository extends EntityRepository
         //todo in php 7.1 there will be a return object or null typehint
         return $query->getOneOrNullResult();
     }
+
+    /**
+     * Find all not billed Bills from a given User.
+     *
+     * @param User $user
+     * @return array
+     */
+    public function findAllNotBilledBillsFromTheUser(User $user) {
+        $query = $this->createQueryBuilder('b')
+            ->where('(b.partner = :p1 OR b.partner = :p2) AND b.billed = false')
+            ->setParameter('p1', $user->getPartnerone()->getId())
+            ->setParameter('p2', $user->getPartnertwo()->getId())
+            ->orderBy('b.billdate', 'ASC')
+            ->getQuery();
+
+        return $query->getResult();
+    }
 }

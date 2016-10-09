@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class InvoiceController extends Controller
 {
@@ -39,22 +40,11 @@ class InvoiceController extends Controller
         $selected_user = $session->get('user');
 
         if($selected_user == null) {
-            return $this->render('error.html.twig', array(
-                'error'=>'no user selected',
-                'usersession'=>$session->get('user')
-            ));
+            return $this->renderErrorNoUserSelected();
         }
 
-        //get the unbilled bills from the db
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('AppBundle:Bill');
-        $query = $repository->createQueryBuilder('b')
-            ->where('(b.partner = :p1 OR b.partner = :p2) AND b.billed = false')
-            ->setParameter('p1', $selected_user->getPartnerone()->getId())
-            ->setParameter('p2', $selected_user->getPartnertwo()->getId())
-            ->orderBy('b.billdate', 'ASC')
-            ->getQuery();
-        $bills = $query->getResult();
+        $bills = $em->getRepository('AppBundle:Bill')->findAllNotBilledBillsFromTheUser($selected_user);
 
         //calculate the amount for each partner
         $amount_p1 = $this->calculateAmount($bills, $selected_user->getPartnerone()->getId());
@@ -66,7 +56,7 @@ class InvoiceController extends Controller
             ->getForm();
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid() && $bills !=null) {
+        if ($form->isSubmitted() && $form->isValid() && $bills != null) {
 
             //create the invoice and update the bill
             $invoice = new Invoice();
@@ -91,7 +81,6 @@ class InvoiceController extends Controller
             $this->addFlash('notice', 'Invoice created...');
             return $this->redirectToRoute('showinvoices');
         }
-
 
         return $this->render('invoices/createinvoice.html.twig', array(
             'usersession'=>$session->get('user'),
@@ -135,7 +124,7 @@ class InvoiceController extends Controller
 
     /**
      * Renders the error response if no user is selected.
-     *
+     *s
      * @return Response
      */
     private function renderErrorNoUserSelected() : Response {
