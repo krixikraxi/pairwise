@@ -93,29 +93,23 @@ class BillController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('AppBundle:Bill');
-        //$repository = $this->getDoctrine()->getRepository('AppBundle:Bill');
-        $query = $repository->createQueryBuilder('b')
-            ->where('(b.partner = :p1 OR b.partner = :p2) AND b.id = :id AND b.billed = false')
-            ->setParameter('p1', $selected_user->getPartnerone()->getId())
-            ->setParameter('p2', $selected_user->getPartnertwo()->getId())
-            ->setParameter('id', $id)
-            ->getQuery();
-
-        /** @var Bill $bill */
-        $bill = $query->getOneOrNullResult();
+        $bill = $em->getRepository('AppBundle:Bill')->findBillByIdFromUserNotBilled($selected_user, $id);
 
         if (!$bill) {
-            throw $this->createNotFoundException('The bill is already billed ore you dont have a bill with the id: '.$id);
+            throw $this->createNotFoundException('The bill is already billed ore you don\'t have a bill with the id: '.$id);
         }
 
-        //remove the bill
         $em->remove($bill);
         $em->flush();
 
         return $this->redirectToRoute('showbill');
     }
 
+    /**
+     * Renders the error response if no user is selected.
+     *
+     * @return Response
+     */
     private function renderErrorNoUserSelected() : Response {
         return $this->render('error.html.twig', array(
             'error'=>'no user selected',
