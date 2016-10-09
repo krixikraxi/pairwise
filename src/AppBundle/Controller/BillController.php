@@ -9,6 +9,7 @@ use AppBundle\Form\SelectPartnerType;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,20 +23,10 @@ class BillController extends Controller
         $selected_user = $session->get('user');
 
         if($selected_user == null) {
-            return $this->render('error.html.twig', array(
-                'error'=>'no user selected',
-                'usersession'=>$session->get('user')
-            ));
+            return $this->renderErrorNoUserSelected();
         }
 
-        $bill = new Bill();
-        $bill->setBilldate(new Datetime());
-        $form = $this->createForm(BillType::class, $bill, array(
-            'partners'=>[
-                $selected_user->getPartnerone(),
-                $selected_user->getPartnertwo()
-            ]));
-
+        $form = $this->createBillForm($selected_user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
 
@@ -47,6 +38,8 @@ class BillController extends Controller
                     'No partner found for id '.$partner
                 );
             }
+
+            $bill = $form->getData();
             $bill->setPartner($partner);
             $bill->setBilled(false);
             $em->persist($bill);
@@ -115,6 +108,23 @@ class BillController extends Controller
             'error'=>'no user selected',
             'usersession'=>null
         ));
+    }
+
+    /**
+     * Create a bill form with a given user.
+     *
+     * @param User $user
+     * @return Form
+     */
+    private function createBillForm(User $user) : Form {
+        $bill = new Bill();
+        $bill->setBilldate(new Datetime());
+        $form = $this->createForm(BillType::class, $bill, array(
+            'partners'=>[
+                $user->getPartnerone(),
+                $user->getPartnertwo()
+            ]));
+        return $form;
     }
 
 }
