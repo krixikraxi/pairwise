@@ -4,7 +4,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Bill;
 use AppBundle\Entity\Invoice;
+use AppBundle\Entity\User;
 use DateTime;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,7 +52,6 @@ class InvoiceController extends Controller
         $amount_p1 = $this->calculateAmount($bills, $selected_user->getPartnerone()->getId());
         $amount_p2 = $this->calculateAmount($bills, $selected_user->getPartnertwo()->getId());
 
-        //todo: handle this without a form?
         $form = $this->createFormBuilder(array())
             ->add('Create the Invoice', SubmitType::class)
             ->getForm();
@@ -58,16 +59,7 @@ class InvoiceController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() && $bills != null) {
 
-            //create the invoice and update the bill
-            $invoice = new Invoice();
-            $invoice->setUser($em->getRepository('AppBundle:User')->find($selected_user->getId()));
-            $invoice->setInvoicedate(new Datetime());
-            if($amount_p1 < $amount_p2) {
-                $invoice->setPayingpartner($selected_user->getPartnerone()->getPartnername());
-            } else {
-                $invoice->setPayingpartner($selected_user->getPartnertwo()->getPartnername());
-            }
-            $invoice->setAmount($this->calculatePayAmount($amount_p1, $amount_p2));
+            $invoice = $this->createNewInvoice($bills, $selected_user, $em);
 
             /** @var Bill $bill */
             foreach ($bills as $bill) {
@@ -92,6 +84,34 @@ class InvoiceController extends Controller
     }
 
     /**
+     * Creates a new Invoice for a given User and Bills.
+     *
+     * @param array $bills
+     * @param User $user
+     * @param EntityManager $em
+     * @return Invoice
+     */
+    private function createNewInvoice(array $bills, User $user, EntityManager $em) : Invoice {
+        $invoice = new Invoice();
+        $invoice->setUser($em->getRepository('AppBundle:User')->find($user->getId()));
+        $invoice->setInvoicedate(new Datetime());
+
+        $bill_sum_p1 = $this->calculateAmount($bills, $user->getPartnerone()->getId());
+        $bill_sum_p2 = $this->calculateAmount($bills, $user->getPartnertwo()->getId());
+
+        if($bill_sum_p1 < $bill_sum_p2) {
+            $invoice->setPayingpartner($user->getPartnerone()->getPartnername());
+        } else {
+            $invoice->setPayingpartner($user->getPartnertwo()->getPartnername());
+        }
+        $invoice->setAmount($this->calculatePayAmount($bill_sum_p1, $bill_sum_p2));
+
+        return $invoice;
+    }
+
+    /**
+     * Calculates the bills amount for a given partner.
+     *
      * @param $bills
      * @return int|mixed
      */
@@ -108,6 +128,8 @@ class InvoiceController extends Controller
     }
 
     /**
+     * Calculates the amount that has to be payed.
+     *
      * @param $amount1
      * @param $amount2
      * @return float
