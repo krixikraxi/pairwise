@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome to PairWise!{% endblock %}</title>
-
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}"/>
@@ -15,49 +14,41 @@
         <div id="wrap">
 
             <!-- Fixed navbar -->
-            <div class="navbar navbar-default navbar-fixed-top">
-                <div class="container">
+            <div class="navbar navbar-default">
+                <div class="container-fluid">
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
                         <a class="navbar-brand" href="{{ path('mainpage') }}">Pairwise</a>
                     </div>
-                    <div class="collapse navbar-collapse">
-                        <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav">
 
-                            {% if app.request.get('_route') == 'mainpage' %}
-                                <li class="active"><a href="{{ path('mainpage') }}">Home</a></li>
-                            {% else %}
-                                <li><a href="{{ path('mainpage') }}">Home</a></li>
-                            {% endif %}
+                        {% if app.request.get('_route') == 'mainpage' %}
+                            <li class="active"><a href="{{ path('mainpage') }}">Home</a></li>
+                        {% else %}
+                            <li><a href="{{ path('mainpage') }}">Home</a></li>
+                        {% endif %}
 
-                            {% if app.request.get('_route') == 'loginuser' %}
-                                <li class="active"><a href="{{ path('loginuser') }}">User</a></li>
-                            {% else %}
-                                <li><a href="{{ path('loginuser') }}">User</a></li>
-                            {% endif %}
+                        {% if app.request.get('_route') == 'loginuser' %}
+                            <li class="active"><a href="{{ path('loginuser') }}">User</a></li>
+                        {% else %}
+                            <li><a href="{{ path('loginuser') }}">User</a></li>
+                        {% endif %}
 
-                            <li><a href="{{ path('showbill') }}">Bills</a></li>
-                            <li><a href="{{ path('showinvoices') }}">Invoices</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav pull-right">
-                            <li class="dropdown">
-                                <a href="#" id="nbAcctDD" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="icon-user"></i>{% if usersession != null %}{{ usersession.username }} {% else %} no User selected {% endif %}<i class="icon-sort-down"></i>
+                        <li><a href="{{ path('showbill') }}">Bills</a></li>
+                        <li><a href="{{ path('showinvoices') }}">Invoices</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown">
+                            <a href="#" id="nbAcctDD" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-user"></i>{% if usersession != null %}{{ usersession.username }} {% else %} no User selected {% endif %}<i class="icon-sort-down"></i>
 
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('logoutuser') }}">Logout</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="{{ path('logoutuser') }}">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
-
             <!-- Begin page content -->
             {% block body %}{% endblock %}
 
