@@ -20,22 +20,10 @@ class InvoiceController extends Controller
         $selected_user = $session->get('user');
 
         if($selected_user == null) {
-            return $this->render('error.html.twig', array(
-                'error'=>'no user selected',
-                'usersession'=>$session->get('user')
-            ));
+            return $this->renderErrorNoUserSelected();
         }
 
-        //pull the invoices from the db
-        $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('AppBundle:Invoice');
-        $query = $repository->createQueryBuilder('b')
-            ->where('b.user = :user')
-            ->setParameter('user', $selected_user->getId())
-            ->orderBy('b.invoicedate', 'ASC')
-            ->getQuery();
-        $invoices = $query->getResult();
-
+        $invoices = $this->getDoctrine()->getRepository('AppBundle:Invoice')->findAllInvoicesFromTheUser($selected_user);
 
         return $this->render('invoices/invoices.html.twig', array(
             'usersession'=>$session->get('user'),
@@ -143,6 +131,18 @@ class InvoiceController extends Controller
             $endresult = $amount2 - $amount1;
         }
         return $endresult / 2;
+    }
+
+    /**
+     * Renders the error response if no user is selected.
+     *
+     * @return Response
+     */
+    private function renderErrorNoUserSelected() : Response {
+        return $this->render('error.html.twig', array(
+            'error'=>'no user selected',
+            'usersession'=>null
+        ));
     }
 
 }
