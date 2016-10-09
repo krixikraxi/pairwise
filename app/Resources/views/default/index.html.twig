@@ -5,32 +5,30 @@
     <div class="container">
         <div class="page-header">
             <h1>Welcome to Pairwise!</h1>
+            With this tool you can split bills between two parties.
         </div>
-        <h3>Here you can split bills between two parties.</h3>
+        First of all you need to create a new user with two partners, or select an existing one.<br>
+        After you selected an user, bills can be added and reviewed.<br>
+        Furthermore invoices with not billed bills can be created, after a bill is in an invoice it cant be deleted anymore.<br>
         <br>
-        Please select a User:
+        The Invoice splits the amount between the two parties and shows which partner ows the other one money.<br>
         <br>
-        {{ form_start(form) }}
-        <div>
-            {{ form_label(form.users) }}:
-            {{ form_widget(form.users) }}
-            {{ form_widget(form.select) }}
-        </div>
-        {{ form_end(form) }}
-
+        For Example:<br>
+        together-calculated amount for Alex: 100<br>
+        together-calculated amount for Manu: 150<br>
         <br>
+        150 - 100 / 2 = 25<br>
+        Paying partner: alex<br>
         <br>
-
         {% if usersession != null %}
-            Infos about the selected User:<br>
-            UserID: {{ usersession.id }}<br>
-            Username: {{ usersession.username }}<br>
-            Description: {{ usersession.description }}<br>
-            <br>
-            Partner 1: {{ usersession.partnerone.partnername }} <{{ usersession.partnerone.id }}><br>
-            Partner 2: {{ usersession.partnertwo.partnername }} <{{ usersession.partnertwo.id }}><br>
+            Shortlinks:
+        <ul>
+            <li>
+                <a href="{{ path('createbill') }}">Create a new Bill</a>
+            </li>
+        </ul>
         {% else %}
-            Please Select a User to display Infos!
+            As a first step you need to <a href="{{ path('loginuser') }}">login</a> with an user.
         {% endif %}
 
     </div>

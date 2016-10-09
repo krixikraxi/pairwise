@@ -34,14 +34,13 @@
                                 <li><a href="{{ path('mainpage') }}">Home</a></li>
                             {% endif %}
 
-                            {% if app.request.get('_route') == 'createuser' %}
-                                <li class="active"><a href="{{ path('createuser') }}">Create User</a></li>
+                            {% if app.request.get('_route') == 'loginuser' %}
+                                <li class="active"><a href="{{ path('loginuser') }}">User</a></li>
                             {% else %}
-                                <li><a href="{{ path('createuser') }}">Create User</a></li>
+                                <li><a href="{{ path('loginuser') }}">User</a></li>
                             {% endif %}
 
-                            <li><a href="{{ path('createbill') }}">Create Bill</a></li>
-                            <li><a href="{{ path('showbill') }}">Show Bills</a></li>
+                            <li><a href="{{ path('showbill') }}">Bills</a></li>
                             <li><a href="{{ path('showinvoices') }}">Invoices</a></li>
                         </ul>
                         <ul class="nav navbar-nav pull-right">
@@ -51,7 +50,7 @@
 
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('logoutuser') }}">Deselect User</a></li>
+                                    <li><a href="{{ path('logoutuser') }}">Logout</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -69,8 +68,6 @@
                 <p class="text-muted credit">This is a small Project: <a href="http://localhost:8000/">Pairwise Home</a> - all bugs are on purpose.</p>
             </div>
         </div>
-
-
 
         {% for flashMessage in app.session.flashbag.get('notice') %}
             <div class="flash-notice">

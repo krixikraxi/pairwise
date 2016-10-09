@@ -4,7 +4,7 @@
 
     <div class="container">
         <div class="page-header">
-            <h1>Show all Invoices!</h1>
+            <h1>Manage your Invoices!</h1>
             <a href="{{ path('createinvoice') }}">Create a new Invoice</a>
         </div>
 
@@ -22,7 +22,7 @@
                 <tr>
                     <td>{{ invoice.id }}</td>
                     <td>{{ invoice.invoicedate | date("m.d.Y h:m") }}</td>
-                    <td>{{ invoice.amount }}</td>
+                    <td>{{ invoice.amount | number_format(2, ',', '.') }}€</td>
                     <td>{{ invoice.payingpartner }}</td>
                 </tr>
             {% endfor %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Manage your Users!</h1>
+            <a href="{{ path('createuser') }}">Create a new User</a>
+        </div>
+
+        {% if usersession == null %}
+        Please select a User:
+        <br>
+        {{ form_start(form) }}
+        <div>
+            {{ form_label(form.users) }}:
+            {{ form_widget(form.users) }}
+            {{ form_widget(form.select) }}
+        </div>
+        {{ form_end(form) }}
+        {% endif %}
+
+        {% if usersession != null %}
+            Infos about the selected User:<br>
+            UserID: {{ usersession.id }}<br>
+            Username: {{ usersession.username }}<br>
+            Description: {{ usersession.description }}<br>
+            <br>
+            Partner 1: {{ usersession.partnerone.partnername }} <{{ usersession.partnerone.id }}><br>
+            Partner 2: {{ usersession.partnertwo.partnername }} <{{ usersession.partnertwo.id }}><br>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}

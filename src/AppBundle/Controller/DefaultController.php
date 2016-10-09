@@ -18,17 +18,9 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request) {
         $session = $request->getSession();
-        $form = $this->createForm(SelectUserType::class, array());
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            //set the session for the selected user
-            $selected_user = $form['users']->getData();
-            $session->set('user', $selected_user);
-        }
 
         return $this->render('default/index.html.twig', array(
-            'form'=> $form->createView(),
             'usersession'=>$session->get('user')
         ));
     }
